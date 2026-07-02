@@ -69,6 +69,7 @@ pipeline {
                 echo 'Analyse de l\'image Nginx avec un conteneur Trivy...'
                 bat """
                 docker run --rm ^
+                  -e TRIVY_DOCKER_HOST="npipe:////./pipe/docker_engine" ^
                   -v //./pipe/docker_engine://./pipe/docker_engine ^
                   aquasec/trivy:latest image --severity HIGH,CRITICAL ${env.DOCKER_HUB_USER}/${env.IMAGE_NAME}:${env.IMAGE_TAG}
                 """
