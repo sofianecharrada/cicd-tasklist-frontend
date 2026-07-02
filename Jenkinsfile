@@ -51,8 +51,12 @@ pipeline {
                 echo 'Génération du SBOM Frontend au format SPDX via Syft...'
                 bat """
                 docker run --rm ^
-                  -v "%WORKSPACE%:/project" ^
-                  anchore/syft:latest dir:/project -o spdx-json=/project/sbom-spdx.json
+                  -v "%WORKSPACE%:/project_host" ^
+                  anchore/syft:latest dir:/project_host -o spdx-json=/tmp/sbom-spdx.json
+                
+                docker run --rm ^
+                  -v "%WORKSPACE%:/project_host" ^
+                  anchore/syft:latest sh -c "cp /tmp/sbom-spdx.json /project_host/sbom-spdx.json"
                 """
             }
         }
