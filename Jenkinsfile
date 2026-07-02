@@ -52,7 +52,7 @@ pipeline {
                 // 1. On lance Syft sans volume, il analyse le workspace Jenkins
                 // 2. On redirige sa sortie brute directement dans ton vrai fichier Windows complet
                 bat """
-                docker run --rm -v "%WORKSPACE%:/project" anchore/syft:latest dir:/project -o spdx-json > "C:\\Users\\sofiane\\Documents\\Projet Pipelines\\Projet à rendre\\cicd-tasklist-frontend\\sbom-spdx.json"
+                docker run --rm -v "%WORKSPACE%:/project" anchore/syft:latest dir:/project -o spdx-json > "C:\\Users\\sofiane\\Documents\\Projet Pipelines\\Rendu_projet\\cicd-tasklist-frontend\\sbom-spdx.json"
                 """
             }
         }
