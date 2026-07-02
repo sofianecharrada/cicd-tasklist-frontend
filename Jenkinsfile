@@ -48,15 +48,11 @@ pipeline {
 
         stage('4. Génération du SBOM (Sécurité)') {
             steps {
-                echo 'Génération du SBOM Frontend au format SPDX via Syft...'
+                echo 'Génération du SBOM directement dans le dossier utilisateur Frontend...'
                 bat """
                 docker run --rm ^
-                  -v "%WORKSPACE%:/project_host" ^
-                  anchore/syft:latest dir:/project_host -o spdx-json=/tmp/sbom-spdx.json
-                
-                docker run --rm ^
-                  -v "%WORKSPACE%:/project_host" ^
-                  anchore/syft:latest sh -c "cp /tmp/sbom-spdx.json /project_host/sbom-spdx.json"
+                  -v "C:\\Users\\sofiane\\Documents\\Projet Pipelines\\Projet à rendre\\cicd-tasklist-frontend:/project" ^
+                  anchore/syft:latest dir:/project -o spdx-json=/project/sbom-spdx.json
                 """
             }
         }
