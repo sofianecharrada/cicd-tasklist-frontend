@@ -83,4 +83,22 @@ describe('TaskList', () => {
         );
         expect(screen.getByText('Aucune tâche pour le moment')).toBeInTheDocument();
     });
+
+	it('shows empty state message when no tasks', () => {
+        render(
+            <TaskList
+                tasks={[]}
+                loading={false}
+                error={null}
+                onToggle={vi.fn()}
+                onDelete={vi.fn()}
+                onEdit={vi.fn()}
+            />
+        );
+        // Utilisation du data-testid présent dans ton HTML
+        expect(screen.getByTestId('empty')).toBeInTheDocument();
+        // Vérification des vrais textes de ton composant
+        expect(screen.getByText('Aucune tâche')).toBeInTheDocument();
+        expect(screen.getByText('Commencez par ajouter votre première tâche !')).toBeInTheDocument();
+    });
 });
