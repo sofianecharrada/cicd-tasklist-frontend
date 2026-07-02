@@ -67,7 +67,10 @@ describe('TaskList', () => {
                 onEdit={vi.fn()}
             />
         );
-        expect(screen.getByText('Une erreur est survenue')).toBeInTheDocument();
+        // On cible le container grâce à son testid
+        expect(screen.getByTestId('error')).toBeInTheDocument();
+        // Utilisation d'une Regex pour ignorer le découpage HTML du texte
+        expect(screen.getByText(/Une erreur est survenue/i)).toBeInTheDocument();
     });
 
     it('shows empty state message when no tasks', () => {
@@ -81,23 +84,7 @@ describe('TaskList', () => {
                 onEdit={vi.fn()}
             />
         );
-        expect(screen.getByText('Aucune tâche pour le moment')).toBeInTheDocument();
-    });
-
-	it('shows empty state message when no tasks', () => {
-        render(
-            <TaskList
-                tasks={[]}
-                loading={false}
-                error={null}
-                onToggle={vi.fn()}
-                onDelete={vi.fn()}
-                onEdit={vi.fn()}
-            />
-        );
-        // Utilisation du data-testid présent dans ton HTML
         expect(screen.getByTestId('empty')).toBeInTheDocument();
-        // Vérification des vrais textes de ton composant
         expect(screen.getByText('Aucune tâche')).toBeInTheDocument();
         expect(screen.getByText('Commencez par ajouter votre première tâche !')).toBeInTheDocument();
     });
