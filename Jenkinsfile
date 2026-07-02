@@ -48,11 +48,11 @@ pipeline {
 
         stage('4. Génération du SBOM (Sécurité)') {
             steps {
-                echo 'Génération du SBOM directement dans le dossier utilisateur Frontend...'
+                echo 'Génération du SBOM directement dans le dossier utilisateur...'
+                // 1. On lance Syft sans volume, il analyse le workspace Jenkins
+                // 2. On redirige sa sortie brute directement dans ton vrai fichier Windows complet
                 bat """
-                docker run --rm ^
-                  -v "C:\\Users\\sofiane\\Documents\\Projet Pipelines\\Projet à rendre\\cicd-tasklist-frontend:/project" ^
-                  anchore/syft:latest dir:/project -o spdx-json=/project/sbom-spdx.json
+                docker run --rm -v "%WORKSPACE%:/project" anchore/syft:latest dir:/project -o spdx-json > "C:\\Users\\sofiane\\Documents\\Projet Pipelines\\Projet à rendre\\cicd-tasklist-frontend\\sbom-spdx.json"
                 """
             }
         }
