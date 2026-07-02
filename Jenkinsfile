@@ -66,12 +66,16 @@ pipeline {
 
         stage('6. Scan de Vulnérabilités (Trivy)') {
             steps {
-                echo 'Analyse de l\'image Nginx avec un conteneur Trivy...'
+                echo 'Exportation de l\'image et analyse de sécurité via Trivy...'
+                // 1. On exporte l'image construite dans un fichier archive .tar
+                // 2. On lance Trivy en mode "image de fichier" (-i) sur cette archive
+                // 3. On nettoie le fichier .tar à la fin
                 bat """
+                docker save -o frontend-image.tar ${env.DOCKER_HUB_USER}/${env.IMAGE_NAME}:${env.IMAGE_TAG}
                 docker run --rm ^
-                  -e TRIVY_DOCKER_HOST="npipe:////./pipe/docker_engine" ^
-                  -v //./pipe/docker_engine://./pipe/docker_engine ^
-                  aquasec/trivy:latest image --severity HIGH,CRITICAL ${env.DOCKER_HUB_USER}/${env.IMAGE_NAME}:${env.IMAGE_TAG}
+                  -v "%WORKSPACE%:/project" ^
+                  aquasec/trivy:latest image --input /project/frontend-image.tar --severity HIGH,CRITICAL
+                del frontend-image.tar
                 """
             }
         }
